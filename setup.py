@@ -35,7 +35,7 @@ from genluhn import __license__ as genluhn_license
 
 # Populating the long description
 readme_path = os.path.join(setupDir, "README.md")
-with open(, "r") as fh:
+with open(readme_path, "r") as fh:
     long_description = fh.read()
 
 # Populating the install requirements
