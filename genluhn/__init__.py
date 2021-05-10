@@ -23,7 +23,7 @@ __copyright__ = '© 2021 Barcelona Supercomputing Center (BSC), ES'
 __license__ = 'LGPL-2.1'
 
 # https://www.python.org/dev/peps/pep-0396/
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 from typing import List, NewType, Union
 
@@ -140,5 +140,5 @@ def compute(digits:Union[str, int, bytes, bytearray, Digits], base:int) -> Digit
 		
 	return partial % base
 
-def validate(digits:Union[str, int, Digits], base:int) -> bool:
+def validate(digits:Union[str, int, bytes, bytearray, Digits], base:int) -> bool:
 	return compute(digits, base) == 0
