@@ -23,7 +23,7 @@ __copyright__ = '© 2021 Barcelona Supercomputing Center (BSC), ES'
 __license__ = 'LGPL-2.1'
 
 # https://www.python.org/dev/peps/pep-0396/
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 from typing import List, NewType, Union
 
@@ -86,7 +86,24 @@ def strToDigits(numstr:str, base:int) -> Digits:
 	
 	return digits
 
-def compute(digits:Union[str, int, Digits], base:int) -> Digit:
+def bytesToDigits(byteslike:Union[bytes, bytearray], base:int) -> Digits:
+	"""
+	This method translates from a byte notation to a list of digits.
+	This method only works with bases 16 and 256
+	"""
+	
+	if base==256:
+		return list(byteslike)
+	elif base==16:
+		digits = []
+		for bytelike in byteslike:
+			digits.append((bytelike & 0xF0) >> 4)
+			digits.append(bytelike & 0x0F)
+		return digits
+	else:
+		raise ValueError('In bytes representations, base can be either 16 or 256')
+
+def compute(digits:Union[str, int, bytes, bytearray, Digits], base:int) -> Digit:
 	"""
 	The input are either a list of integers, representing the digits
 	of a number in a custom base, or a string representing the base
@@ -102,6 +119,8 @@ def compute(digits:Union[str, int, Digits], base:int) -> Digit:
 		theDigits = intToDigits(digits, base)
 	elif isinstance(digits, str):
 		theDigits = strToDigits(digits, base)
+	elif isinstance(digits, (bytes, bytearray)):
+		theDigits = bytesToDigits(digits, base)
 	elif isinstance(digits, (list,tuple)):
 		for idigit, digit in enumerate(digits):
 			if digit < 0 or digit >= base:

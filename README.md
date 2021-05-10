@@ -18,4 +18,4 @@ genluhn.validate('5326-9057-e12f-e2b7-4ba0-7c89-2560-a2-e', 16)
 ```
 
 
-Accessory methods of this library are `intToDigits` and `strToDigits`, which are used when either an integer or a string have to be translated to a list of digits in the given numerical base.
+Accessory methods of this library are `intToDigits`, `strToDigits` and `bytesToDigits`, which are used when either an integer, or a string or a byteslike object have to be translated to a list of digits in the given numerical base.
