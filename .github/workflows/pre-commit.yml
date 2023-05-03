@@ -1,0 +1,58 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit-3_6:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [ "3.6" ]
+    name: Pre-commit python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          architecture: x64
+      - run: pip install --upgrade pip wheel
+      - run: pip install -r dev-requirements.txt -r mypy-requirements.txt
+      - name: MyPy cache
+        uses: actions/cache@v3
+        with:
+          path: .mypy_cache/${{ matrix.python-version }}
+          key: mypy-${{ matrix.python-version }}
+      - name: 'pre-commit (custom Python ${{ matrix.python-version }})'
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all -c .pre-commit-config-gh-${{ matrix.python-version }}.yaml
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11" ]
+    name: Pre-commit python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          architecture: x64
+      - run: pip install --upgrade pip wheel
+      - run: pip install -r dev-requirements.txt -r mypy-requirements.txt
+      - name: MyPy cache
+        uses: actions/cache@v3
+        with:
+          path: .mypy_cache/${{ matrix.python-version }}
+          key: mypy-${{ matrix.python-version }}
+      - name: 'pre-commit (standard)'
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all -c .pre-commit-config-gh.yaml
+    
